@@ -3,5 +3,10 @@ export type UserInformation = {
     lastName: string;
     email: string;
     city: string;
-    phone: string;
+    numberDisplay: string;
 }
+
+export type FunctionalInputProps = {
+    labelText: string;
+    inputProps: any;
+  };
