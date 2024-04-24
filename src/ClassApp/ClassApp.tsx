@@ -1,19 +1,19 @@
-import { Component } from 'react';
-import { ProfileInformation } from '../ProfileInformation';
-import { ClassForm } from './ClassForm';
+import { Component } from "react";
+import { ProfileInformation } from "../ProfileInformation";
+import { ClassForm } from "./ClassForm";
+import { UserInformation } from "../types";
 
-export class ClassApp extends Component {
- 
+export class ClassApp extends Component<UserInformation | null> {
   state = {
-    user: null
-  }
+    user: null,
+  };
 
-  handleFormSubmit = (user) => {
+  handleFormSubmit = (user: UserInformation) => {
     this.setState({ user });
   };
 
   render() {
-    const { user } = this.state; 
+    const { user } = this.state;
     return (
       <>
         <h2>Class Component</h2>
@@ -23,4 +23,3 @@ export class ClassApp extends Component {
     );
   }
 }
-

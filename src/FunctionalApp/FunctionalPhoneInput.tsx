@@ -1,48 +1,55 @@
-import { createRef } from "react";
+import { ChangeEvent, createRef } from "react";
+
+type FunctionalPhoneInputProps = {
+  labelText: string;
+  phoneNumberInput: string[];
+  setPhoneNumberInput: (input: string[]) => void;
+};
 
 export const FunctionalPhoneInput = ({
   labelText,
   phoneNumberInput,
   setPhoneNumberInput,
-}) => {
+}: FunctionalPhoneInputProps) => {
   const refs = [
-    createRef(null),
-    createRef(null),
-    createRef(null),
-    createRef(null),
+    createRef<HTMLInputElement>(),
+    createRef<HTMLInputElement>(),
+    createRef<HTMLInputElement>(),
+    createRef<HTMLInputElement>(),
   ];
   const ref0 = refs[0];
   const ref1 = refs[1];
   const ref2 = refs[2];
   const ref3 = refs[3];
 
-  const createOnChangehandler = (index) => (e) => {
-    const lengths = [2, 2, 2, 1];
-    const currentMaxLength = lengths[index];
-    const nextRef = refs[index + 1];
-    const prevRef = refs[index - 1];
-    const value = e.target.value;
-    const shouldGoToNextRef =
-      currentMaxLength === value.length && nextRef?.current;
-    const shouldGoToPrevRef = value.length === 0 && prevRef?.current;
+  const createOnChangehandler =
+    (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
+      const lengths = [2, 2, 2, 1];
+      const currentMaxLength = lengths[index];
+      const nextRef = refs[index + 1];
+      const prevRef = refs[index - 1];
+      const value = e.target.value;
+      const shouldGoToNextRef =
+        currentMaxLength === value.length && nextRef?.current;
+      const shouldGoToPrevRef = value.length === 0 && prevRef?.current;
 
-    const newState = phoneNumberInput.map((phoneInput, phoneInputIndex) => {
-      return index === phoneInputIndex ? e.target.value : phoneInput;
-    });
+      const newState = phoneNumberInput.map((phoneInput, phoneInputIndex) => {
+        return index === phoneInputIndex ? e.target.value : phoneInput;
+      });
 
-    if (shouldGoToNextRef) {
-      nextRef?.current.focus();
-    }
-    if (shouldGoToPrevRef) {
-      prevRef?.current.focus();
-    }
+      if (shouldGoToNextRef) {
+        nextRef?.current.focus();
+      }
+      if (shouldGoToPrevRef) {
+        prevRef?.current.focus();
+      }
 
-    if (index === 3 && value.length > 1) {
-      return;
-    }
+      if (index === 3 && value.length > 1) {
+        return;
+      }
 
-    setPhoneNumberInput(newState);
-  };
+      setPhoneNumberInput(newState);
+    };
 
   return (
     <div className="input-wrap">

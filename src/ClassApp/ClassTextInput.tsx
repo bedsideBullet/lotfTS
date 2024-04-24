@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import { Component } from "react";
+import { FunctionalInputProps } from "../types";
 
-export class ClassTextInput extends Component {
+export class ClassTextInput extends Component<FunctionalInputProps> {
   render() {
     const { labelText, inputProps } = this.props;
 

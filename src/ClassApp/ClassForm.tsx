@@ -1,60 +1,62 @@
-import { Component } from 'react';
-import { ErrorMessage } from '../ErrorMessage';
-import { ClassTextInput } from './ClassTextInput';
-import { ClassPhoneInput } from './ClassPhoneInput';
-import { isEmailValid, isNumberValid } from '../utils/validations';
-import { allCities } from '../utils/all-cities';
-import { ClassCityInput } from './ClassCityInput';
+import { Component, FormEvent } from "react";
+import { ErrorMessage } from "../ErrorMessage";
+import { ClassTextInput } from "./ClassTextInput";
+import { ClassPhoneInput } from "./ClassPhoneInput";
+import { isEmailValid, isNumberValid } from "../utils/validations";
+import { allCities } from "../utils/all-cities";
+import { ClassCityInput } from "./ClassCityInput";
+import { UserInformation } from "../types";
 
-const firstNameErrorMessage = 'First name must be at least 2 characters long';
-const lastNameErrorMessage = 'Last name must be at least 2 characters long';
-const emailErrorMessage = 'Email is Invalid';
-const cityErrorMessage = 'State is Invalid';
-const phoneNumberErrorMessage = 'Invalid Phone Number';
+const firstNameErrorMessage = "First name must be at least 2 characters long";
+const lastNameErrorMessage = "Last name must be at least 2 characters long";
+const emailErrorMessage = "Email is Invalid";
+const cityErrorMessage = "State is Invalid";
+const phoneNumberErrorMessage = "Invalid Phone Number";
 
-export class ClassForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isSubmitted: false,
-      firstName: '',
-      lastName: '',
-      email: '',
-      city: '',
-      phoneNumberInput: ['', '', '', ''],
-    };
-  }
+export class ClassForm extends Component<UserInformation> {
+  state = {
+    isSubmitted: false,
+    firstName: "",
+    lastName: "",
+    email: "",
+    city: "",
+    phoneNumberInput: ["", "", "", ""],
+  };
 
   reset = () => {
     this.setState({
       isSubmitted: false,
-      firstName: '',
-      lastName: '',
-      email: '',
-      city: '',
-      phoneNumberInput: ['', '', '', ''],
+      firstName: "",
+      lastName: "",
+      email: "",
+      city: "",
+      phoneNumberInput: ["", "", "", ""],
     });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     this.setState({ isSubmitted: true });
 
-    const {
-      firstName,
-      lastName,
-      email,
-      city,
-      phoneNumberInput,
-    } = this.state;
+    const { firstName, lastName, email, city, phoneNumberInput } = this.state;
 
     const isFirstNameValid = firstName.length > 2;
     const isLastNameValid = lastName.length > 2;
     const isEmailValidFlag = isEmailValid(email);
     const isCityValid = allCities.includes(city);
-    const isPhoneNumberValid = isNumberValid(phoneNumberInput.join(''));
+    const isPhoneNumberValid = isNumberValid(phoneNumberInput.join(""));
+    const numberDisplay = phoneNumberInput.join("-");
+
+    if (
+      !isFirstNameValid &&
+      !isLastNameValid &&
+      !isEmailValidFlag &&
+      !isCityValid &&
+      !isPhoneNumberValid
+    ) {
+      alert("Bad Inputs");
+    }
 
     if (
       isFirstNameValid &&
@@ -63,37 +65,33 @@ export class ClassForm extends Component {
       isCityValid &&
       isPhoneNumberValid
     ) {
-      const userData = {
+      const userData: UserInformation = {
         firstName,
         lastName,
         email,
         city,
-        phoneNumber: phoneNumberInput.join(''),
+        numberDisplay,
+        onSubmit: this.props.onSubmit,
       };
 
       if (this.props.onSubmit) {
         this.props.onSubmit(userData);
       }
 
-      this.reset(); 
+      this.reset();
     }
   };
 
   render() {
-    const {
-      isSubmitted,
-      firstName,
-      lastName,
-      email,
-      city,
-      phoneNumberInput,
-    } = this.state;
+    const { isSubmitted, firstName, lastName, email, city, phoneNumberInput } =
+      this.state;
 
+    const formattedCities = allCities.map((city) => city.toLowerCase());
     const isFirstNameValid = firstName.length > 2;
     const isLastNameValid = lastName.length > 2;
     const isEmailValidFlag = isEmailValid(email);
-    const isCityValid = allCities.includes(city);
-    const isPhoneNumberValid = isNumberValid(phoneNumberInput.join(''));
+    const isCityValid = formattedCities.includes(city.toLowerCase());
+    const isPhoneNumberValid = isNumberValid(phoneNumberInput.join(""));
 
     const shouldShowFirstNameError = isSubmitted && !isFirstNameValid;
     const shouldShowLastNameError = isSubmitted && !isLastNameValid;
@@ -109,9 +107,10 @@ export class ClassForm extends Component {
         <ClassTextInput
           labelText="First Name:"
           inputProps={{
-            placeholder: 'Bilbo',
+            placeholder: "Bilbo",
             value: firstName,
-            onChange: (e) => this.setState({ firstName: e.target.value }),
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              this.setState({ firstName: e.target.value }),
           }}
         />
         <ErrorMessage
@@ -122,9 +121,10 @@ export class ClassForm extends Component {
         <ClassTextInput
           labelText="Last Name:"
           inputProps={{
-            placeholder: 'Baggins',
+            placeholder: "Baggins",
             value: lastName,
-            onChange: (e) => this.setState({ lastName: e.target.value }),
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              this.setState({ lastName: e.target.value }),
           }}
         />
         <ErrorMessage
@@ -135,33 +135,31 @@ export class ClassForm extends Component {
         <ClassTextInput
           labelText="Email:"
           inputProps={{
-            placeholder: 'bilbo-baggins@adventurehobbits.ne',
+            placeholder: "bilbo-baggins@adventurehobbits.ne",
             value: email,
-            onChange: (e) => this.setState({ email: e.target.value }),
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              this.setState({ email: e.target.value }),
           }}
         />
-        <ErrorMessage
-          message={emailErrorMessage}
-          show={shouldShowEmailError}
-        />
+        <ErrorMessage message={emailErrorMessage} show={shouldShowEmailError} />
 
         <ClassCityInput
-          labelText={'City:'}
+          labelText={"City:"}
           inputProps={{
-            placeholder: 'Hobbiton',
+            placeholder: "Hobbiton",
             value: city,
-            onChange: (e) => this.setState({ city: e.target.value }),
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              this.setState({ city: e.target.value }),
           }}
         />
-        <ErrorMessage
-          message={cityErrorMessage}
-          show={shouldShowCityError}
-        />
+        <ErrorMessage message={cityErrorMessage} show={shouldShowCityError} />
 
         <ClassPhoneInput
-          labelText={'Phone:'}
+          labelText={"Phone:"}
           phoneNumberInput={phoneNumberInput}
-          setPhoneNumberInput={(input) => this.setState({ phoneNumberInput: input })}
+          setPhoneNumberInput={(input) =>
+            this.setState({ phoneNumberInput: input })
+          }
         />
 
         <ErrorMessage
@@ -174,6 +172,3 @@ export class ClassForm extends Component {
     );
   }
 }
-
-
-

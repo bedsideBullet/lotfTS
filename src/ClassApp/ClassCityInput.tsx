@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { allCities } from '../utils/all-cities';
+import { Component } from "react";
+import { allCities } from "../utils/all-cities";
+import { FunctionalInputProps } from "../types";
 
-export class ClassCityInput extends Component {
+export class ClassCityInput extends Component<FunctionalInputProps> {
   render() {
     const { labelText, inputProps } = this.props;
 
@@ -24,5 +25,3 @@ export class ClassCityInput extends Component {
     );
   }
 }
-
-
