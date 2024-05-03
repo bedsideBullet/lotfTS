@@ -4,7 +4,7 @@ export type UserInformation = {
   email: string;
   city: string;
   numberDisplay: string;
-  onSubmit: (userInfo: UserInformation) => void;
+  // onSubmit: (userInfo: UserInformation) => void;
 };
 
 export type FunctionalInputProps = {

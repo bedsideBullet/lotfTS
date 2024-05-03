@@ -7,13 +7,17 @@ import { allCities } from "../utils/all-cities";
 import { ClassCityInput } from "./ClassCityInput";
 import { UserInformation } from "../types";
 
+type ClassFormProps = {
+  onSubmit: (user: UserInformation) => void;
+};
+
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
 const emailErrorMessage = "Email is Invalid";
 const cityErrorMessage = "State is Invalid";
 const phoneNumberErrorMessage = "Invalid Phone Number";
 
-export class ClassForm extends Component<UserInformation> {
+export class ClassForm extends Component<ClassFormProps> {
   state = {
     isSubmitted: false,
     firstName: "",
@@ -44,41 +48,30 @@ export class ClassForm extends Component<UserInformation> {
     const isFirstNameValid = firstName.length > 2;
     const isLastNameValid = lastName.length > 2;
     const isEmailValidFlag = isEmailValid(email);
-    const isCityValid = allCities.includes(city);
+    const formattedCities = allCities.map((city) => city.toLowerCase());
+    const isCityValid = formattedCities.includes(city);
     const isPhoneNumberValid = isNumberValid(phoneNumberInput.join(""));
     const numberDisplay = phoneNumberInput.join("-");
 
-    if (
-      !isFirstNameValid &&
-      !isLastNameValid &&
-      !isEmailValidFlag &&
-      !isCityValid &&
-      !isPhoneNumberValid
-    ) {
-      alert("Bad Inputs");
-    }
-
-    if (
+    const isFormValid =
       isFirstNameValid &&
       isLastNameValid &&
       isEmailValidFlag &&
       isCityValid &&
-      isPhoneNumberValid
-    ) {
+      isPhoneNumberValid;
+
+    if (isFormValid) {
       const userData: UserInformation = {
         firstName,
         lastName,
         email,
         city,
         numberDisplay,
-        onSubmit: this.props.onSubmit,
       };
-
-      if (this.props.onSubmit) {
-        this.props.onSubmit(userData);
-      }
-
+      this.props.onSubmit(userData);
       this.reset();
+    } else {
+      alert("Bad Inputs");
     }
   };
 

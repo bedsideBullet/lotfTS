@@ -3,7 +3,7 @@ import { ProfileInformation } from "../ProfileInformation";
 import { ClassForm } from "./ClassForm";
 import { UserInformation } from "../types";
 
-export class ClassApp extends Component<UserInformation | null> {
+export class ClassApp extends Component<{}, { user: UserInformation | null }> {
   state = {
     user: null,
   };
