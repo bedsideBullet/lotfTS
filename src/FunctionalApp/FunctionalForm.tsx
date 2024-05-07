@@ -74,7 +74,6 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
         email,
         city,
         numberDisplay,
-        onSubmit,
       };
 
       if (onSubmit) {
