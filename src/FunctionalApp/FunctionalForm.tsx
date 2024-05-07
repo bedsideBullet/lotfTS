@@ -6,8 +6,7 @@ import { isEmailValid, isNumberValid } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
 import { FunctionalCityInput } from "./FunctionalCityInput";
 import { UserInformation } from "../types";
-import { capitalize } from "../utils/transformations";
-
+import { capitalize, formatPhoneNumber } from "../utils/transformations";
 
 type onSubmit = { onSubmit: (UserInformation: UserInformation) => void };
 
@@ -25,7 +24,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
   const [city, setCity] = useState("");
   const [phoneNumberInput, setPhoneNumberInput] = useState(["", "", "", ""]);
   const formattedNumber = phoneNumberInput.join("");
-  const numberDisplay = phoneNumberInput.join("-");
+  const numberDisplay = formatPhoneNumber(formattedNumber);
 
   const isFirstNameValid = firstName.length > 2;
   const isLastNameValid = lastName.length > 2;
@@ -60,7 +59,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
       !isPhoneNumberValid
     ) {
       alert("Bad Inputs");
-      return
+      return;
     }
 
     if (
