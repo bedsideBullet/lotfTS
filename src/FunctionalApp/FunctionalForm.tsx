@@ -6,6 +6,8 @@ import { isEmailValid, isNumberValid } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
 import { FunctionalCityInput } from "./FunctionalCityInput";
 import { UserInformation } from "../types";
+import { capitalize } from "../utils/transformations";
+
 
 type onSubmit = { onSubmit: (UserInformation: UserInformation) => void };
 
@@ -23,13 +25,12 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
   const [city, setCity] = useState("");
   const [phoneNumberInput, setPhoneNumberInput] = useState(["", "", "", ""]);
   const formattedNumber = phoneNumberInput.join("");
-  const formattedCities = allCities.map((city) => city.toLowerCase());
   const numberDisplay = phoneNumberInput.join("-");
 
   const isFirstNameValid = firstName.length > 2;
   const isLastNameValid = lastName.length > 2;
   const isEmailValidFlag = isEmailValid(email);
-  const isCityValid = formattedCities.includes(city.toLowerCase());
+  const isCityValid = allCities.includes(city);
   const isPhoneNumberValid = isNumberValid(formattedNumber);
 
   const shouldShowFirstNameError = isSubmitted && !isFirstNameValid;
@@ -59,6 +60,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
       !isPhoneNumberValid
     ) {
       alert("Bad Inputs");
+      return
     }
 
     if (
@@ -95,7 +97,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
           placeholder: "Bilbo",
           value: firstName,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setFirstName(e.target.value),
+            setFirstName(capitalize(e.target.value)),
         }}
       />
       <ErrorMessage
@@ -109,7 +111,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
           placeholder: "Baggins",
           value: lastName,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setLastName(e.target.value),
+            setLastName(capitalize(e.target.value)),
         }}
       />
       <ErrorMessage
@@ -134,7 +136,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
           placeholder: "Hobbiton",
           value: city,
           onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setCity(e.target.value),
+            setCity(capitalize(e.target.value)),
         }}
       />
       <ErrorMessage message={cityErrorMessage} show={shouldShowCityError} />
