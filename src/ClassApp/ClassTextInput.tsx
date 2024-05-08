@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { FunctionalInputProps } from "../types";
+import { FunctionalInputProps } from "../FunctionalApp/FunctionalTextInput";
 
 export class ClassTextInput extends Component<FunctionalInputProps> {
   render() {

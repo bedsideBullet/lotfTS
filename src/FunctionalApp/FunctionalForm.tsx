@@ -2,8 +2,7 @@ import { FormEvent, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { FunctionalTextInput } from "./FunctionalTextInput";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
-import { isEmailValid, isNumberValid } from "../utils/validations";
-import { allCities } from "../utils/all-cities";
+import { isEmailValid, isNumberValid, isCityValid } from "../utils/validations";
 import { FunctionalCityInput } from "./FunctionalCityInput";
 import { UserInformation } from "../types";
 import { capitalize, formatPhoneNumber } from "../utils/transformations";
@@ -29,13 +28,13 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
   const isFirstNameValid = firstName.length > 2;
   const isLastNameValid = lastName.length > 2;
   const isEmailValidFlag = isEmailValid(email);
-  const isCityValid = allCities.includes(city);
+  const isCityValidFlag = isCityValid(city);
   const isPhoneNumberValid = isNumberValid(formattedNumber);
 
   const shouldShowFirstNameError = isSubmitted && !isFirstNameValid;
   const shouldShowLastNameError = isSubmitted && !isLastNameValid;
   const shouldShowEmailError = isSubmitted && !isEmailValidFlag;
-  const shouldShowCityError = isSubmitted && !isCityValid;
+  const shouldShowCityError = isSubmitted && !isCityValidFlag;
   const shouldShowPhoneNumberError = isSubmitted && !isPhoneNumberValid;
 
   const reset = () => {
@@ -55,7 +54,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
       !isFirstNameValid ||
       !isLastNameValid ||
       !isEmailValidFlag ||
-      !isCityValid ||
+      !isCityValidFlag ||
       !isPhoneNumberValid
     ) {
       alert("Bad Inputs");
@@ -66,7 +65,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
       isFirstNameValid &&
       isLastNameValid &&
       isEmailValidFlag &&
-      isCityValid &&
+      isCityValidFlag &&
       isPhoneNumberValid
     ) {
       const userData: UserInformation = {
@@ -95,8 +94,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
         inputProps={{
           placeholder: "Bilbo",
           value: firstName,
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setFirstName(capitalize(e.target.value)),
+          onChange: (e) => setFirstName(capitalize(e.target.value)),
         }}
       />
       <ErrorMessage
@@ -109,8 +107,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
         inputProps={{
           placeholder: "Baggins",
           value: lastName,
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setLastName(capitalize(e.target.value)),
+          onChange: (e) => setLastName(capitalize(e.target.value)),
         }}
       />
       <ErrorMessage
@@ -123,8 +120,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
         inputProps={{
           placeholder: "bilbo-baggins@adventurehobbits.ne",
           value: email,
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setEmail(e.target.value),
+          onChange: (e) => setEmail(e.target.value),
         }}
       />
       <ErrorMessage message={emailErrorMessage} show={shouldShowEmailError} />
@@ -134,8 +130,7 @@ export const FunctionalForm = ({ onSubmit }: onSubmit) => {
         inputProps={{
           placeholder: "Hobbiton",
           value: city,
-          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setCity(capitalize(e.target.value)),
+          onChange: (e) => setCity(capitalize(e.target.value)),
         }}
       />
       <ErrorMessage message={cityErrorMessage} show={shouldShowCityError} />

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { allCities } from "../utils/all-cities";
-import { FunctionalInputProps } from "../types";
+import { FunctionalInputProps } from "../FunctionalApp/FunctionalTextInput";
 
 export class ClassCityInput extends Component<FunctionalInputProps> {
   render() {

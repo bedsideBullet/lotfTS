@@ -1,5 +1,4 @@
 import { Component, RefObject, createRef } from "react";
-// import { UserInformation } from "../types";
 
 type ClassPhoneInputProps = {
   labelText: string;

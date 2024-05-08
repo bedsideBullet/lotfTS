@@ -2,10 +2,10 @@ import { Component, FormEvent } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { ClassTextInput } from "./ClassTextInput";
 import { ClassPhoneInput } from "./ClassPhoneInput";
-import { isEmailValid, isNumberValid } from "../utils/validations";
-import { allCities } from "../utils/all-cities";
+import { isEmailValid, isNumberValid, isCityValid } from "../utils/validations";
 import { ClassCityInput } from "./ClassCityInput";
 import { UserInformation } from "../types";
+import { capitalize, formatPhoneNumber } from "../utils/transformations";
 
 type ClassFormProps = {
   onSubmit: (user: UserInformation) => void;
@@ -48,16 +48,16 @@ export class ClassForm extends Component<ClassFormProps> {
     const isFirstNameValid = firstName.length > 2;
     const isLastNameValid = lastName.length > 2;
     const isEmailValidFlag = isEmailValid(email);
-    const formattedCities = allCities.map((city) => city.toLowerCase());
-    const isCityValid = formattedCities.includes(city);
-    const isPhoneNumberValid = isNumberValid(phoneNumberInput.join(""));
-    const numberDisplay = phoneNumberInput.join("-");
+    const isCityValidFlag = isCityValid(city);
+    const formattedNumber = phoneNumberInput.join("");
+    const isPhoneNumberValid = isNumberValid(formattedNumber);
+    const numberDisplay = formatPhoneNumber(formattedNumber);
 
     const isFormValid =
       isFirstNameValid &&
       isLastNameValid &&
       isEmailValidFlag &&
-      isCityValid &&
+      isCityValidFlag &&
       isPhoneNumberValid;
 
     if (isFormValid) {
@@ -79,17 +79,16 @@ export class ClassForm extends Component<ClassFormProps> {
     const { isSubmitted, firstName, lastName, email, city, phoneNumberInput } =
       this.state;
 
-    const formattedCities = allCities.map((city) => city.toLowerCase());
     const isFirstNameValid = firstName.length > 2;
     const isLastNameValid = lastName.length > 2;
     const isEmailValidFlag = isEmailValid(email);
-    const isCityValid = formattedCities.includes(city.toLowerCase());
+    const isCityValidFlag = isCityValid(city);
     const isPhoneNumberValid = isNumberValid(phoneNumberInput.join(""));
 
     const shouldShowFirstNameError = isSubmitted && !isFirstNameValid;
     const shouldShowLastNameError = isSubmitted && !isLastNameValid;
     const shouldShowEmailError = isSubmitted && !isEmailValidFlag;
-    const shouldShowCityError = isSubmitted && !isCityValid;
+    const shouldShowCityError = isSubmitted && !isCityValidFlag;
     const shouldShowPhoneNumberError = isSubmitted && !isPhoneNumberValid;
 
     return (
@@ -103,7 +102,7 @@ export class ClassForm extends Component<ClassFormProps> {
             placeholder: "Bilbo",
             value: firstName,
             onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-              this.setState({ firstName: e.target.value }),
+              this.setState({ firstName: capitalize(e.target.value) }),
           }}
         />
         <ErrorMessage
@@ -117,7 +116,7 @@ export class ClassForm extends Component<ClassFormProps> {
             placeholder: "Baggins",
             value: lastName,
             onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-              this.setState({ lastName: e.target.value }),
+              this.setState({ lastName: capitalize(e.target.value) }),
           }}
         />
         <ErrorMessage
@@ -142,7 +141,7 @@ export class ClassForm extends Component<ClassFormProps> {
             placeholder: "Hobbiton",
             value: city,
             onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-              this.setState({ city: e.target.value }),
+              this.setState({ city: capitalize(e.target.value) }),
           }}
         />
         <ErrorMessage message={cityErrorMessage} show={shouldShowCityError} />
