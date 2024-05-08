@@ -1,7 +1,7 @@
 import { allCities } from "./all-cities";
 
 export function isEmailValid(emailAddress: string) {
-  const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   return !!emailAddress.match(regex);
 }
 export function isNumberValid(formattedNumber: string) {
